@@ -33,6 +33,6 @@ public class MainActivity extends ReactActivity {
 
   @Override
   protected void onCreate(Bundle savedInstaceState) {
-    super..onCreate(null);
+    super.onCreate(null);
   }
 }

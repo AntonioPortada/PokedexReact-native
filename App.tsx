@@ -8,26 +8,45 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, View } from 'react-native';
-
-function Home() {
-  return 
-    <View>
-      <Text>Home</Text>
-    </View>
-}
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Home from './views/Home';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const App = () => {
 
   const Tab = createBottomTabNavigator();
+  const queryClient = new QueryClient();
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name='Home' component={Home} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient} >
+      <NavigationContainer>
+        <Tab.Navigator screenOptions={({route}) => ({
+          tabBarIcon: ({color}) => {
+            let icon = '';
+
+            if(route.name === 'Inicio') {
+              icon = 'home';
+            }
+            else if(route.name === 'Favoritos') {
+              icon = 'heart';
+            }
+            else {
+              icon = 'information';
+            }
+            
+            return <Icon name={icon} size={25} color={color} />;
+          },
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'gray',
+          headerShown: false
+        })}>
+          <Tab.Screen name="Inicio" component={Home} />
+          <Tab.Screen name="Favoritos" component={Home} />
+          <Tab.Screen name="Acerca" component={Home} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
-}
+};
 
 export default App;
