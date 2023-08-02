@@ -11,6 +11,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './views/Home';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Favorites from './views/Favorite';
+import About from './views/About';
 
 const App = () => {
 
@@ -41,8 +43,8 @@ const App = () => {
           headerShown: false
         })}>
           <Tab.Screen name="Inicio" component={Home} />
-          <Tab.Screen name="Favoritos" component={Home} />
-          <Tab.Screen name="Acerca" component={Home} />
+          <Tab.Screen name="Favoritos" component={Favorites} />
+          <Tab.Screen name="Acerca" component={About} />
         </Tab.Navigator>
       </NavigationContainer>
     </QueryClientProvider>
