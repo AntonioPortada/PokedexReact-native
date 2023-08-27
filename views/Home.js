@@ -51,7 +51,7 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <Header tmp={tmp} setTmp={setTmp} setSearch={setSearch} />
+      <Header showSearch tmp={tmp} setTmp={setTmp} setSearch={setSearch} title='Pokedex' description='Busca un pokemon usando su nombre o su número' />
       {!search && (
         <FlatList data={data?.pages.map(page => page.results).flat()} 
                   renderItem={({item}) => <Card pokemon={item} />} numColumns={2} onEndReached={loadMore} 

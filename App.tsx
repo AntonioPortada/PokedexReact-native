@@ -13,6 +13,7 @@ import Home from './views/Home';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Favorites from './views/Favorite';
 import About from './views/About';
+import ContextProvider from './context';
 
 const App = () => {
 
@@ -21,32 +22,34 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient} >
-      <NavigationContainer>
-        <Tab.Navigator screenOptions={({route}) => ({
-          tabBarIcon: ({color}) => {
-            let icon = '';
+      <ContextProvider>
+        <NavigationContainer>
+          <Tab.Navigator screenOptions={({route}) => ({
+            tabBarIcon: ({color}) => {
+              let icon = '';
 
-            if(route.name === 'Inicio') {
-              icon = 'home';
-            }
-            else if(route.name === 'Favoritos') {
-              icon = 'heart';
-            }
-            else {
-              icon = 'information';
-            }
-            
-            return <Icon name={icon} size={25} color={color} />;
-          },
-          tabBarActiveTintColor: 'tomato',
-          tabBarInactiveTintColor: 'gray',
-          headerShown: false
-        })}>
-          <Tab.Screen name="Inicio" component={Home} />
-          <Tab.Screen name="Favoritos" component={Favorites} />
-          <Tab.Screen name="Acerca" component={About} />
-        </Tab.Navigator>
-      </NavigationContainer>
+              if(route.name === 'Inicio') {
+                icon = 'home';
+              }
+              else if(route.name === 'Favoritos') {
+                icon = 'heart';
+              }
+              else {
+                icon = 'information';
+              }
+              
+              return <Icon name={icon} size={25} color={color} />;
+            },
+            tabBarActiveTintColor: 'tomato',
+            tabBarInactiveTintColor: 'gray',
+            headerShown: false
+          })}>
+            <Tab.Screen name="Inicio" component={Home} />
+            <Tab.Screen name="Favoritos" component={Favorites} />
+            <Tab.Screen name="Acerca" component={About} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </ContextProvider>
     </QueryClientProvider>
   );
 };

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FavoriteContext } from "../context";
 
 const { height } = Dimensions.get('screen') ;
 
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Card({pokemon}) {
-
+    const { favorites, updateFavorites } = useContext(FavoriteContext);
     const [ isFavorite, setIsFavorite ] = useState(false);
     const getPokemon = async ({queryKey}) => {
         const res = await fetch(queryKey[1]);
@@ -71,18 +72,19 @@ export default function Card({pokemon}) {
 
     useEffect(() => {
         async function getStatus() {
-            const totalList = await AsyncStorage.getItem('_favorites');
 
-            if(totalList) {
-                const tmp = JSON.parse(totalList);
-                const find = tmp.filter(elm => elm.name === pokemon.name);
+            const find = favorites.filter(elm => elm.name === pokemon.name);
 
-                if(find.length > 0) {
-                    setIsFavorite(true);
-                }
+            if(find.length > 0) {
+                setIsFavorite(true);
             }
-        } getStatus();
-    }, []);
+            else {
+                setIsFavorite(false);
+            }
+        } 
+        
+        getStatus();
+    }, [favorites, pokemon.name]);
 
     const addFavorite = async poke => {
 
@@ -94,15 +96,29 @@ export default function Card({pokemon}) {
                 list.push(poke);
 
                 await AsyncStorage.setItem('_favorites', JSON.stringify(list));
+
+                setIsFavorite(true);
             }
             else {
                 const newList = JSON.parse(totalList);
-                newList.push(poke);
+                const find = newList.filter(elm => elm.name === pokemon.name);
 
-                await AsyncStorage.setItem('_favorites', JSON.stringify(newList));
+                if(find.length === 0) {
+                    newList.push(poke);
+
+                    await AsyncStorage.setItem('_favorites', JSON.stringify(newList));
+
+                    setIsFavorite(true);
+                }
+                else {
+                    const newListPokes = newList.filter(elm => elm.name !== pokemon.name);
+
+                    await AsyncStorage.setItem('_favorites', JSON.stringify(newListPokes));
+
+                    setIsFavorite(false);
+                }
             }
-
-            setIsFavorite(true);
+            updateFavorites();
         }
         catch(error) {
             console.log('error en like de pokemons: ', error);
